@@ -130,13 +130,12 @@ public class FileManagerApp extends Application {
         tableView.setRowFactory(tv -> {
             TableRow<FileInfoBean> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if(event.getClickCount() == 1 && (!row.isEmpty())) {
-                    FileInfoBean p = row.getItem();
-                    lastPath = getParePath(nowPath);
-                    nowPath = p.getFilePath();
-                }else if(event.getClickCount() == 2 && (!row.isEmpty()) && row.getItem().getIsFile().equals("文件")) {
-                    FileInfoBean p = row.getItem();
-                    nowPath = p.getFilePath();
+                FileInfoBean p = row.getItem();
+                lastPath = getParePath(nowPath);
+                nowPath = p.getFilePath();
+                String per = p.getPermission();
+                if(event.getClickCount() == 2 && (!row.isEmpty()) && row.getItem().getIsFile().equals("文件")
+                        && (Permission.canRead(per) || Permission.canWrite(per))) {
                     Thread open = new Thread(){
                         @Override
                         public void run() {
@@ -149,11 +148,8 @@ public class FileManagerApp extends Application {
                         }
                     };
                     open.start();
-                }else if(event.getClickCount() == 2 && (!row.isEmpty()) && row.getItem().getIsFile().equals("目录")) {
-                    FileInfoBean p = row.getItem();
-                    lastPath = getParePath(nowPath);
-                    nowPath = p.getFilePath();
-
+                }else if(event.getClickCount() == 2 && (!row.isEmpty()) && row.getItem().getIsFile().equals("目录")
+                        && (Permission.canRead(per) || Permission.canWrite(per))) {
                     deleteDate();
                     try {
                         addData(nowPath);
@@ -297,10 +293,10 @@ public class FileManagerApp extends Application {
         public void handle(ActionEvent event) {
             //将光标所在行移出列表并在物理磁盘中删除。
             boolean su = delete(new File(nowPath));
-            if (su == false ) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("错误");
-                alert.setContentText("文件夹不为空");
+
+            if (!su ) {
+                Alert error = new Alert(Alert.AlertType.ERROR, "目录不为空！");
+                error.showAndWait();
                 return;
             }
             deleteDate();

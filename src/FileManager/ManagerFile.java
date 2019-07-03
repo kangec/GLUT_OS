@@ -39,13 +39,7 @@ public class ManagerFile {
     public static Map<Integer, FileInfoBean> getFileList(File file) throws IOException{
         int count = 0;
         int tCount;
-        String name;
-        String path;
-        String permission;
-        String size;
-        String line;
-        String lastTime;
-        String isFile;
+        String name,path,permission,size,line,lastTime,isFile;
         BufferedReader br = null;
         FileInfoBean fInfo;
         StringTokenizer st;
@@ -127,7 +121,6 @@ public class ManagerFile {
                 }
             }
         }
-
         return res;
     }
 }

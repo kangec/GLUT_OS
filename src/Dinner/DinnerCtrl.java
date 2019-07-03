@@ -3,20 +3,22 @@ package Dinner;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class DinnerCtrl extends JFrame {
     private static final int personCount = 5;
-    private static Room room = new Room(personCount - 1);
+    private static Semaphore semaphore = new Semaphore(personCount - 1);
     boolean started = false;
     boolean stopped = false;
     final static Chopstick[] chopstick = new Chopstick[personCount];
     final static Philosopher[] philos = new Philosopher[personCount];
     private Image offScreenImage;
-    class DinnerTable extends JPanel
+
+    class DinnerTable extends JLayeredPane
     {
         private int counts;
         private int r1 = 20;
@@ -40,14 +42,15 @@ public class DinnerCtrl extends JFrame {
             super.paintComponent(page);
             int x1, y1, x2, y2, x3, y3;
             page.fillOval(200, 150, 150, 150);
+            ImageIcon img = new ImageIcon("640.png");
+            img.setImage(img.getImage().getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_AREA_AVERAGING));
+            page.drawImage(img.getImage(),0,0,this);
             Color c = page.getColor();
             page.setColor(Color.GREEN);
             page.fillOval(250, 200, 50, 50);
             page.setColor(c);
 
             for (int i = 0; i < counts; i++) {
-
-
                 x1 = 275 + (int) (r1 * Math.cos(((delta * i)+ delta0*(-5)  ) * Math.PI / 180));
                 y1 = 225 + (int) (r1 * Math.sin(((delta * i) + delta0*(-5)  ) * Math.PI / 180));
                 x2 = 275 + (int) (r2 * Math.cos(((delta * i) + delta0 *(-5) ) * Math.PI / 180));
@@ -124,11 +127,11 @@ public class DinnerCtrl extends JFrame {
         table.setBounds(20, 50, 500, 420);
         //初始化筷子
         for (int i = 0; i < chopstick.length; i++) {
-            chopstick[i] = new Chopstick(i, table);
+            chopstick[i] = new Chopstick(i);
         }
         //初始化哲学家
         for (int i = 0; i < philos.length; i++) {
-            philos[i] = new Philosopher(room, i,
+            philos[i] = new Philosopher(semaphore, i,
                     chopstick[i], chopstick[(i + 1) % personCount]);
         }
         mainPanel.add(table);
@@ -136,6 +139,14 @@ public class DinnerCtrl extends JFrame {
         getContentPane().add(mainPanel,BorderLayout.CENTER);
         setResizable(false);
         setVisible(true);
+        while(true) {
+            table.repaint();
+            try {
+                Thread.sleep(1000/120);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private class StartListener implements ActionListener {

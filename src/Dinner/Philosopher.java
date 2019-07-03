@@ -4,15 +4,15 @@ import java.util.concurrent.TimeUnit;
 
 public  class Philosopher extends Thread {
     Status status = Status.THINK;
-    private Room room;
+    private Semaphore semaphore;
     private Chopstick left, right;
     private int personId;
     public final String wait = "等待中", eat = "就餐中", think = "思考中";
     private String message;
     private Random rand = new Random();
 
-    public Philosopher(Room room, int id, Chopstick left, Chopstick right) {
-        this.room = room;
+    public Philosopher(Semaphore semaphore, int id, Chopstick left, Chopstick right) {
+        this.semaphore = semaphore;
         this.personId = id;
         this.left = left;
         this.right = right;
@@ -66,14 +66,14 @@ public  class Philosopher extends Thread {
             }
             catch (InterruptedException e) {
             }
-            room.enter();
+            semaphore.enter();
             eat();
             try {
                 sleep((int) ((rand.nextFloat() + 0.5) * 4000));
             }
             catch (InterruptedException e) {
             }
-            room.exit();
+            semaphore.exit();
         }
     }
 

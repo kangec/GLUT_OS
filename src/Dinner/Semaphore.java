@@ -1,12 +1,12 @@
 package Dinner;
 
-public class Room {
+public class Semaphore {
     static int room;
 
     /*
      * @param room 信号量，room属于共享资源
      * */
-    public Room(int room) {
+    public Semaphore(int room) {
         this.room = room;
     }
 

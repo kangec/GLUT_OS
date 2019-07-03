@@ -5,15 +5,11 @@ public class Chopstick {
     private int id;
     private Philosopher taker;
     private Philosopher  owner;
-    private DinnerCtrl.DinnerTable table;
-
     /**
      * @param id 哲学家的唯一身份信息ID
-     * @param table 状态消息面板
      */
-    public Chopstick(int id, DinnerCtrl.DinnerTable table) {
+    public Chopstick(int id) {
         this.id = id;
-        this.table = table;
         avilable = true;
     }
 
@@ -35,7 +31,6 @@ public class Chopstick {
         }
         avilable = false;
         this.setOwner(taker);
-        table.repaint();
     }
 
     /*
@@ -45,7 +40,6 @@ public class Chopstick {
         avilable = true;
         this.setOwner(null);
         notify();
-        table.repaint();
     }
 
     public int getOwnerId(){
