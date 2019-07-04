@@ -43,7 +43,7 @@ public class Chopstick {
     }
 
     public int getOwnerId(){
-        return this.getOwner().getPersonId();
+        return getOwner().getid();
     }
 
     public void setTaker(Philosopher taker) {

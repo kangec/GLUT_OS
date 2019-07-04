@@ -3,9 +3,6 @@ package Dinner;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.swing.*;
 
@@ -18,7 +15,7 @@ public class DinnerCtrl extends JFrame {
     final static Philosopher[] philos = new Philosopher[personCount];
     private Image offScreenImage;
 
-    class DinnerTable extends JLayeredPane
+    class DinnerCtrlTable extends JLayeredPane
     {
         private int counts;
         private int r1 = 20;
@@ -30,7 +27,7 @@ public class DinnerCtrl extends JFrame {
         private int delta;
         private int delta0 = -18;
 
-        public DinnerTable(int counts) {
+        public DinnerCtrlTable(int counts) {
             setOpaque(false);
             this.setPreferredSize(new Dimension(600, 400));
             this.counts = counts;
@@ -60,12 +57,12 @@ public class DinnerCtrl extends JFrame {
 
                 //pint chopstick
                 page.setColor(new Color(128,64,0));
-                if (chopstick[i].getOwner() != null && philos[i].getPersonId() == chopstick[i].getOwnerId()
+                if (chopstick[i].getOwner() != null && philos[i].getid() == chopstick[i].getOwnerId()
                         && philos[i].getLeft() == chopstick[i]) {
                     page.drawLine(x3 - 45, y3, x3 - 45, y3 + CHOPS_LENGTH);
                 }
                 if (chopstick[(i + 1) % personCount].getOwner() != null
-                        && philos[i].getPersonId()  == chopstick[(i + 1) % personCount].getOwnerId()
+                        && philos[i].getid()  == chopstick[(i + 1) % personCount].getOwnerId()
                         && philos[i].getRight() == chopstick[(i + 1) % personCount]) {
 
                     page.drawLine(x3 + 45, y3, x3 + 45, y3 + CHOPS_LENGTH);
@@ -123,7 +120,7 @@ public class DinnerCtrl extends JFrame {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(null);
         mainPanel.setBackground(Color.WHITE);
-        DinnerTable table = new DinnerTable(personCount);
+        DinnerCtrlTable table = new DinnerCtrlTable(personCount);
         table.setBounds(20, 50, 500, 420);
         //初始化筷子
         for (int i = 0; i < chopstick.length; i++) {

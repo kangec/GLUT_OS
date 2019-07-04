@@ -6,14 +6,14 @@ public  class Philosopher extends Thread {
     Status status = Status.THINK;
     private Semaphore semaphore;
     private Chopstick left, right;
-    private int personId;
+    private int id;
     public final String wait = "等待中", eat = "就餐中", think = "思考中";
     private String message;
     private Random rand = new Random();
 
     public Philosopher(Semaphore semaphore, int id, Chopstick left, Chopstick right) {
         this.semaphore = semaphore;
-        this.personId = id;
+        this.id = id;
         this.left = left;
         this.right = right;
         message = wait;
@@ -77,8 +77,8 @@ public  class Philosopher extends Thread {
         }
     }
 
-    public int getPersonId() {
-        return personId;
+    public int getid() {
+        return id;
     }
     public Chopstick getLeft() {
         return left;

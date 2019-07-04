@@ -30,7 +30,7 @@ import static FileManager.ManagerFile.*;
 public class FileManagerApp extends Application {
     TableView<FileInfoBean> tableView = new TableView<>();
     ObservableList<FileInfoBean> observableList = FXCollections.observableArrayList();
-    String nowPath = "e:";
+    String nowPath = "D:\\";
     String lastPath = " ";
     String searchStr;
 
